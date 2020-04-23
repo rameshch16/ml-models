@@ -10,11 +10,11 @@ steps:
   args:
   - 'run'
   - 'deploy'
-  - 'service'
+  - 'flask-app'
   - '--image'
   - 'gcr.io/kubernetes-deploy-274406/falsk:$COMMIT_SHA'
   - '--region'
-  - 'us-central1-c'
+  - 'us-central1'
   - '--platform'
   - 'managed'
 images:
