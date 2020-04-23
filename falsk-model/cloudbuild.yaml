@@ -1,15 +1,21 @@
 steps:
-  # build the container image
-- name: "gcr.io/cloud-builders/docker/$SHORT_SHA"
-  args: ["build", "-t", "gcr.io/kubernetes-deploy-274406/image:$SHORT_SHA", "/falsk-model/Dockerfile"]
-  # push container image
-- name: "gcr.io/cloud-builders/docker/$SHORT_SHA"
-  args: ["push", "gcr.io/kubernetes-deploy-274406/image:$SHORT_SHA"]
-  # deploy container image to GKE
-- name: "gcr.io/cloud-builders/gke-deploy/$SHORT_SHA"
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/kubernetes-deploy-274406/falsk:$COMMIT_SHA', '/flak-model/.']
+# Push the image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/kubernetes-deploy-274406/falsk:$COMMIT_SHA']
+# Deploy image to Cloud Run
+- name: 'gcr.io/cloud-builders/gcloud'
   args:
-  - run
-  - --filename=kubernetes-config-file
-  - --image=gcr.io/kubernetes-deploy-274406/image:$SHORT_SHA
-  - --location=us-central1-c	
-  - --cluster=cluster-1
+  - 'run'
+  - 'deploy'
+  - 'service'
+  - '--image'
+  - 'gcr.io/kubernetes-deploy-274406/falsk:$COMMIT_SHA'
+  - '--region'
+  - 'us-central1-c'
+  - '--platform'
+  - 'managed'
+images:
+- gcr.io/kubernetes-deploy-274406/falsk
