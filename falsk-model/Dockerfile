@@ -13,7 +13,7 @@ RUN pip3 install scikit-learn
 RUN pip3 install google-cloud-logging 
 RUN pip3 install google-cloud-monitoring 
   
-COPY serving.json serving.json
+#COPY serving.json serving.json
 COPY app.py app.py
 
 ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0", "app:app"]
