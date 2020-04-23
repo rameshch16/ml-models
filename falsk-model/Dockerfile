@@ -10,8 +10,8 @@ RUN pip3 install flask
 RUN pip3 install pandas 
 RUN pip3 install gunicorn   
 RUN pip3 install scikit-learn 
-RUN pip3 install google-cloud-logging 
-RUN pip3 install google-cloud-monitoring 
+#RUN pip3 install google-cloud-logging 
+#RUN pip3 install google-cloud-monitoring 
   
 #COPY serving.json serving.json
 COPY app.py app.py
