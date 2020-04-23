@@ -1,12 +1,12 @@
 steps:
   # build the container image
-- name: "gcr.io/cloud-builders/docker"
-  args: ["build", "-t", "gcr.io/kubernetes-deploy-274406/image:$SHORT_SHA", "/falsk-model/."]
+- name: "gcr.io/cloud-builders/docker/$SHORT_SHA"
+  args: ["build", "-t", "gcr.io/kubernetes-deploy-274406/image:$SHORT_SHA", "/falsk-model/Dockerfile"]
   # push container image
-- name: "gcr.io/cloud-builders/docker"
+- name: "gcr.io/cloud-builders/docker/$SHORT_SHA"
   args: ["push", "gcr.io/kubernetes-deploy-274406/image:$SHORT_SHA"]
   # deploy container image to GKE
-- name: "gcr.io/cloud-builders/gke-deploy"
+- name: "gcr.io/cloud-builders/gke-deploy/$SHORT_SHA"
   args:
   - run
   - --filename=kubernetes-config-file
