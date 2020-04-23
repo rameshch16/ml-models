@@ -8,14 +8,91 @@ steps:
 # Deploy image to Cloud Run
 - name: 'gcr.io/cloud-builders/gcloud'
   args:
-  - 'run'
-  - 'deploy'
-  - 'flask-app'
-  - '--image'
-  - 'gcr.io/kubernetes-deploy-274406/falsk:$COMMIT_SHA'
-  - '--region'
-  - 'us-central1'
-  - '--platform'
-  - 'managed'
+  apiVersion: apps/v1
+kind: Deployment
+metadata:
+  
+  labels:
+    app: nginx-1
+  name: nginx-1
+  namespace: default
+ 
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: nginx-1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx-1
+    spec:
+      containers:
+      - image: gcr.io/kubernetes-deploy-274406/github.com/rameshch16/ml-models@sha256:73e6798112231a3d4f9742617da728ff681fbaeb54afae7b93b7f68cc123b29f
+        imagePullPolicy: IfNotPresent
+        name: ml-models-sha256-1
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 3
+  conditions:
+  - lastTransitionTime: "2020-04-23T13:42:11Z"
+    lastUpdateTime: "2020-04-23T13:42:42Z"
+    message: ReplicaSet "nginx-1-5c5d77cbc4" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2020-04-23T13:44:29Z"
+    lastUpdateTime: "2020-04-23T13:44:29Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 3
+  replicas: 3
+  updatedReplicas: 
+  
+  ---
+  apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2020-04-23T13:43:22Z"
+  generateName: nginx-1-
+  labels:
+    app: nginx-1
+  name: nginx-1-jv5t9
+  namespace: default
+  resourceVersion: "66423"
+  selfLink: /api/v1/namespaces/default/services/nginx-1-jv5t9
+  uid: 65e73070-8568-11ea-9926-42010a80000e
+spec:
+  clusterIP: 10.8.8.167
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 30441
+    port: 80
+    protocol: TCP
+    targetPort: 8088
+  selector:
+    app: nginx-1
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}
 images:
 - gcr.io/kubernetes-deploy-274406/falsk
