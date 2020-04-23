@@ -66,6 +66,8 @@ status:
   readyReplicas: 3
   replicas: 3
   updatedReplicas: 3
+  images:
+- gcr.io/kubernetes-deploy-274406/falsk
  apiVersion: v1
 kind: Service
 metadata:
@@ -92,5 +94,4 @@ spec:
   type: LoadBalancer
 status:
   loadBalancer: {}
-images:
-- gcr.io/kubernetes-deploy-274406/falsk
+
