@@ -1,0 +1,15 @@
+steps:
+  # build the container image
+- name: "gcr.io/cloud-builders/docker"
+  args: ["build", "-t", "gcr.io/kubernetes-deploy-274406/image:tag", "/falsk-model"]
+  # push container image
+- name: "gcr.io/cloud-builders/docker"
+  args: ["push", "gcr.io/kubernetes-deploy-274406/image:tag"]
+  # deploy container image to GKE
+- name: "gcr.io/cloud-builders/gke-deploy"
+  args:
+  - run
+  - --filename=kubernetes-config-file
+  - --image=gcr.io/kubernetes-deploy-274406/image:tag
+  - --location=us-central1-c	
+  - --cluster=cluster-1
